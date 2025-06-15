@@ -22,6 +22,7 @@
          </VBox.margin>
       </PasswordField>
       <Button mnemonicParsing="false" onAction="#handleLogin" text="LOGIN" />
+      <Button mnemonicParsing="false" onAction="#handleSignUpNavigation" text="SIGN UP" />
       <Label fx:id="errorLabel" />
    </children>
 </VBox>

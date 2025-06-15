@@ -20,6 +20,7 @@ public class HelloApplication extends Application {
         /// Registrirajte sve potrebne scene
         SceneManager.registerScene("login", "/com/example/rpgteambuilder/login.fxml");
         SceneManager.registerScene("main", "/com/example/rpgteambuilder/main.fxml");
+        SceneManager.registerScene("signup", "/com/example/rpgteambuilder/signup.fxml");
     }
 
     public static void main(String[] args) {

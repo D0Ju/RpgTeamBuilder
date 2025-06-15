@@ -24,4 +24,20 @@ public class UserRepository {
             return false;
         }
     }
+    public boolean createUser(String username, String password) {
+        String sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            stmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            if (e.getSQLState().equals("23505")) { // Unique constraint violation
+                return false; // Username already exists
+            }
+            e.printStackTrace();
+            throw new RuntimeException("Database error: " + e.getMessage());
+        }
+    }
 }

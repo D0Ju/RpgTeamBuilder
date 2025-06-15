@@ -36,4 +36,8 @@ public class LoginController {
             errorLabel.setText("Invalid username or password!");
         }
     }
+    @FXML
+    private void handleSignUpNavigation() {
+        SceneManager.switchTo("signup");
+    }
 }
