@@ -7,7 +7,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="327.0" prefWidth="503.0" spacing="15.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rpgteambuilder.LoginController">
    <children>
       <Label text="Username:" />
@@ -23,5 +22,6 @@
          </VBox.margin>
       </PasswordField>
       <Button mnemonicParsing="false" onAction="#handleLogin" text="LOGIN" />
+      <Label fx:id="errorLabel" />
    </children>
 </VBox>
