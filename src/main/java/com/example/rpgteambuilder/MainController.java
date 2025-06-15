@@ -1,6 +1,7 @@
 package com.example.rpgteambuilder;
 
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -8,9 +9,7 @@ import javafx.scene.layout.VBox;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class MainController {
     @FXML
@@ -23,6 +22,7 @@ public class MainController {
     private DatabaseConnection dbConnection; // Add this for database access
     private int currentUserId = 1; // Replace with actual user ID from login
     private Character selectedCharacter; // Track selected character for deletion
+    private Map<HBox, Character> characterMap = new HashMap<>();
 
     @FXML
     private void initialize() {
@@ -55,9 +55,11 @@ public class MainController {
 
     private void displayCharacters(int teamId) {
         characterContainer.getChildren().clear();
+        characterMap.clear(); // Clear the map before repopulating
         List<Character> characters = characterRepository.getCharactersForTeam(teamId);
         for (Character character : characters) {
             HBox hbox = new HBox(10);
+            CheckBox checkBox = new CheckBox();
             Label label = new Label(character.toSummaryString());
             label.setStyle("-fx-padding: 5; -fx-background-color: lightgray; -fx-cursor: hand;");
             label.setOnMouseClicked(event -> {
@@ -66,8 +68,9 @@ public class MainController {
             });
             Button editButton = new Button("Edit");
             editButton.setOnAction(event -> editCharacter(character));
-            hbox.getChildren().addAll(label, editButton);
+            hbox.getChildren().addAll(checkBox, label, editButton);
             characterContainer.getChildren().add(hbox);
+            characterMap.put(hbox, character); // Store the mapping
         }
     }
 
@@ -160,29 +163,43 @@ public class MainController {
         }
     }
 
-
     @FXML
     private void handleDeleteCharacter() {
-        if (selectedCharacter == null) {
-            showAlert("Error", "Please select a character by clicking on it first.");
-            return;
-        }
         String selectedTeam = teamListView.getSelectionModel().getSelectedItem();
         if (selectedTeam == null) {
             showAlert("Error", "Please select a team.");
             return;
         }
         int teamId = getTeamIdFromName(selectedTeam);
+        Set<Integer> charactersToDelete = new HashSet<>();
+        for (Node node : characterContainer.getChildren()) {
+            if (node instanceof HBox) {
+                HBox hbox = (HBox) node;
+                CheckBox checkBox = (CheckBox) hbox.getChildren().get(0);
+                if (checkBox.isSelected()) {
+                    Character character = characterMap.get(hbox);
+                    if (character != null) {
+                        charactersToDelete.add(character.getId());
+                    }
+                }
+            }
+        }
+
+        if (charactersToDelete.isEmpty()) {
+            showAlert("Error", "Please select at least one character to delete.");
+            return;
+        }
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Confirm Deletion");
-        confirm.setHeaderText("Delete " + selectedCharacter.getName() + "?");
+        confirm.setHeaderText("Delete " + charactersToDelete.size() + " selected character(s)?");
         confirm.setContentText("This action cannot be undone.");
         Optional<ButtonType> result = confirm.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            deleteCharacter(selectedCharacter.getId());
+            for (int id : charactersToDelete) {
+                deleteCharacter(id);
+            }
             displayCharacters(teamId);
-            selectedCharacter = null;
         }
     }
     private void editCharacter(Character character) {
