@@ -40,6 +40,7 @@ public class MainController {
 
     public void setCurrentUserId(int userId) {
         this.currentUserId = userId;
+        //maknuo loadTeams iz initialize zato sto se nije uspio dohvatiti id i onda se nebi okinuo, ovako se okida nakon sto dobije id od usera
         loadTeams();
     }
     private void loadTeams() {
@@ -75,12 +76,27 @@ public class MainController {
             });
             Button editButton = new Button("Edit");
             editButton.setOnAction(event -> editCharacter(character));
-            hbox.getChildren().addAll(checkBox, label, editButton);
+            Button attackButton = new Button("Attack"); // New button
+            attackButton.setOnAction(event -> performAttack(character)); // Call attack
+            Button defendButton = new Button("Defend"); // New defend button
+            defendButton.setOnAction(event -> performDefend(character)); // New defend action
+            hbox.getChildren().addAll(checkBox, label, editButton, attackButton, defendButton);
             characterContainer.getChildren().add(hbox);
             characterMap.put(hbox, character); // Store the mapping
         }
     }
-
+    private void performAttack(Character character) {
+        if (character != null) {
+            character.attack();
+            showAlert("Attack", character.getName() + " has attacked!");
+        }
+    }
+    private void performDefend(Character character) {
+        if (character != null) {
+            character.defend();
+            showAlert("Defend", character.getName() + " is defending!");
+        }
+    }
     private void showDetailedStats(Character character) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Character Details");
