@@ -5,21 +5,21 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 public class DatabaseConnection {
-    public Connection databaseLink;
 
-    public Connection getConnection() {
-        // Postavite odgovarajući naziv baze podataka, korisnika i password
-        String databaseName = "RpgTeamBuilder"; // Your PostgreSQL database name
-        String databaseUser = "postgres"; // Your PostgreSQL username (default is 'postgres')
-        String databasePassword = "admin"; // Your PostgreSQL password
-        // Postaviti URL do baze
-        String url = "jdbc:postgresql://localhost:5432/" + databaseName;
-        try {
-            Class.forName("org.postgresql.Driver");
-            databaseLink = DriverManager.getConnection(url, databaseUser, databasePassword);
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+    public Connection databaseLink;
+    private static DatabaseConnection instance;
+    private static final String URL = "jdbc:postgresql://localhost:5432/RpgTeamBuilder";
+    private static final String USER = "postgres";
+    private static final String PASSWORD = "admin";
+
+    public Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(URL, USER, PASSWORD);
+    }
+
+    public static synchronized DatabaseConnection getInstance() {
+        if (instance == null) {
+            instance = new DatabaseConnection();
         }
-        return databaseLink;
+        return instance;
     }
 }

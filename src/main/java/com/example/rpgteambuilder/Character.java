@@ -1,6 +1,6 @@
 package com.example.rpgteambuilder;
 
-public abstract class Character {
+public abstract class Character implements Combatant{
     private int id;
     private String name;
     private String characterClass;
@@ -15,6 +15,16 @@ public abstract class Character {
     private int sta;    // Stamina
     private int hp;     // Health Points
     private int mp;     // Magic Points
+
+    @Override
+    public void attack() {
+        System.out.println(name + " attacks with " + characterClass + " abilities!");
+    }
+
+    @Override
+    public void defend() {
+        System.out.println(name + " defends using " + characterClass + " tactics!");
+    }
 
     public Character(int id, String name, String characterClass, int str, int dex, int con, int intel, int wis, int cha, int spd, int lck, int sta, int hp, int mp) {
         this.id = id;

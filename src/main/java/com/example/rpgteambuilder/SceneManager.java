@@ -20,7 +20,7 @@ public class SceneManager {
         sceneMap.put(name, fxmlPath);
     }
 
-    public static void switchTo(String name) {
+    public static void switchTo(String name, Object... args) {
         String fxmlPath = sceneMap.get(name);
         if (fxmlPath == null) {
             System.err.println("Scena s imenom '" + name + "' nije registrirana!");
@@ -32,7 +32,14 @@ public class SceneManager {
 
         try {
             /// ucitajte resurs fxml po fxmlPath
-            Parent root = FXMLLoader.load(SceneManager.class.getResource(fxmlPath));
+            FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource(fxmlPath));
+            Parent root = loader.load();
+            MainController controller = loader.getController(); // Get the loaded controller
+            if (name.equals("main") && args.length > 0 && args[0] instanceof Integer) {
+                int userId = (Integer) args[0];
+                System.out.println("Setting userId in SceneManager: " + userId); // Debug
+                controller.setCurrentUserId(userId); // Set the user ID on the loaded controller
+            }
             Scene scene = new Scene(root);
             mainStage.setScene(scene);
             mainStage.show();

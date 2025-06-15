@@ -11,7 +11,7 @@ public class TeamRepository {
     private DatabaseConnection dbConnection;
 
     public TeamRepository() {
-        dbConnection = new DatabaseConnection();
+        dbConnection = DatabaseConnection.getInstance();
     }
     public void updateTeamName(int teamId, String newName) {
         String sql = "UPDATE teams SET name = ? WHERE id = ?";
@@ -28,6 +28,7 @@ public class TeamRepository {
     public List<Team> getTeamsForUser(int userId) {
         List<Team> teams = new ArrayList<>();
         String sql = "SELECT * FROM teams WHERE user_id = ?";
+        System.out.println("Fetching teams for userId: " + userId); // Debug
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, userId);

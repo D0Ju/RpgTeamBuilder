@@ -5,6 +5,7 @@ import java.sql.Connection;
 
 public class TestBaze {
     public static void main(String[] args) {
+        /*
         DatabaseConnection db = new DatabaseConnection();
         Connection conn = db.getConnection();
         if (conn != null) {
@@ -17,5 +18,7 @@ public class TestBaze {
         } else {
             System.out.println("Connection failed!");
         }
+
+         */
     }
 }

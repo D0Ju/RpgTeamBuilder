@@ -9,7 +9,7 @@ public class UserRepository {
     private DatabaseConnection dbConnection;
 
     public UserRepository() {
-        dbConnection = new DatabaseConnection();
+        dbConnection = DatabaseConnection.getInstance();
     }
 
     public boolean authenticate(String username, String password) {
@@ -39,5 +39,20 @@ public class UserRepository {
             e.printStackTrace();
             throw new RuntimeException("Database error: " + e.getMessage());
         }
+    }
+
+    public int getUserId(String username) {
+        String sql = "SELECT id FROM users WHERE username = ?";
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 }

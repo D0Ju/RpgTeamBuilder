@@ -1,6 +1,7 @@
 package com.example.rpgteambuilder;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -24,14 +25,18 @@ public class LoginController {
     private void handleLogin() {
         String username = usernameField.getText();
         String password = passwordField.getText();
-
         if (username.isEmpty() || password.isEmpty()) {
             errorLabel.setText("Please enter username and password!");
             return;
         }
 
         if (userRepository.authenticate(username, password)) {
-            SceneManager.switchTo("main");
+            int userId = userRepository.getUserId(username);
+            if (userId != -1) {
+                SceneManager.switchTo("main", userId); // Pass user ID
+            } else {
+                showAlert("Error", "User ID could not be retrieved.");
+            }
         } else {
             errorLabel.setText("Invalid username or password!");
         }
@@ -39,5 +44,12 @@ public class LoginController {
     @FXML
     private void handleSignUpNavigation() {
         SceneManager.switchTo("signup");
+    }
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

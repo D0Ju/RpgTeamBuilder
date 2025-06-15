@@ -10,23 +10,10 @@ import java.util.List;
 public class CharacterRepository {
     private DatabaseConnection dbConnection;
 
-    public int getCharacterCountForTeam(int teamId) {
-        String sql = "SELECT COUNT(*) FROM characters WHERE team_id = ?";
-        try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, teamId);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
+
 
     public CharacterRepository() {
-        dbConnection = new DatabaseConnection();
+        dbConnection = DatabaseConnection.getInstance();
     }
 
     public List<Character> getCharactersForTeam(int teamId) {
@@ -192,5 +179,19 @@ public class CharacterRepository {
             e.printStackTrace();
             throw new RuntimeException("Failed to update character: " + e.getMessage());
         }
+    }
+    public int getCharacterCountForTeam(int teamId) {
+        String sql = "SELECT COUNT(*) FROM characters WHERE team_id = ?";
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, teamId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }
