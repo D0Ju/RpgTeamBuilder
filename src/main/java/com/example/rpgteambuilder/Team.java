@@ -15,7 +15,8 @@ public class Team {
         this.name = name;
         this.characters = new ArrayList<>();
     }
-
+    //nepotrebno sad
+/*
     public void addCharacter(Character character) {
         characters.add(character);
     }
@@ -23,7 +24,7 @@ public class Team {
     public void removeCharacter(Character character) {
         characters.remove(character);
     }
-
+*/
     public int getId() { return id; }
     public int getUserId() { return userId; }
     public String getName() { return name; }

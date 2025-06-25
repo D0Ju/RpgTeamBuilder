@@ -19,7 +19,7 @@ public class MainController {
 
     private TeamRepository teamRepository;
     private CharacterRepository characterRepository;
-    private DatabaseConnection dbConnection; // Add this for database access
+    private DatabaseConnection dbConnection;
     private int currentUserId ;
     private Character selectedCharacter; // Track selected character for deletion
     private Map<HBox, Character> characterMap = new HashMap<>();
@@ -28,7 +28,7 @@ public class MainController {
     private void initialize() {
         teamRepository = new TeamRepository();
         characterRepository = new CharacterRepository();
-        dbConnection = DatabaseConnection.getInstance(); // Initialize here
+        dbConnection = DatabaseConnection.getInstance();
 
         teamListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
@@ -44,7 +44,7 @@ public class MainController {
         loadTeams();
     }
     private void loadTeams() {
-        if (currentUserId == 0) { // Safety check
+        if (currentUserId == 0) {
             System.out.println("Warning: currentUserId not set, skipping loadTeams");
             return;
         }

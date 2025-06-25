@@ -12,7 +12,7 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
     @FXML
-    private Label errorLabel; // Add this to your FXML for error messages
+    private Label errorLabel; //FXML error messages
 
     private UserRepository userRepository;
 
@@ -33,7 +33,7 @@ public class LoginController {
         if (userRepository.authenticate(username, password)) {
             int userId = userRepository.getUserId(username);
             if (userId != -1) {
-                SceneManager.switchTo("main", userId); // Pass user ID
+                SceneManager.switchTo("main", userId);
             } else {
                 showAlert("Error", "User ID could not be retrieved.");
             }

@@ -70,7 +70,7 @@ public abstract class Character implements Combatant{
     public void setHp(int hp) { this.hp = hp; }
     public void setMp(int mp) { this.mp = mp; }
 
-    // Summary for team overview (5-6 elements)
+    // Summary for team overview
     public String toSummaryString() {
         String keyStat;
         switch (characterClass) {
